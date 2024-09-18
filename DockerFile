@@ -1,0 +1,32 @@
+# initial
+FROM php:8.1.0-apache
+
+
+# Install necessary packages for Composer and other dependencies
+RUN apt-get update && apt-get install -y \
+    git \
+    unzip \
+    zip \
+    curl
+
+# Install Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# mod_rewrite
+RUN a2enmod rewrite
+
+# Set the working directory to /var/www/html (default Apache webroot)
+WORKDIR /var/www/html
+
+# Copy your application files
+COPY . /var/www/html
+
+# Install Laravel dependencies with Composer
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader
+
+# Expose ports for Apache
+EXPOSE 80
+EXPOSE 443
+
+# Start Apache
+CMD ["apache2-foreground"]
