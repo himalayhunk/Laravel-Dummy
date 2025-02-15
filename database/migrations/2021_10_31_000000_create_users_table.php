@@ -15,6 +15,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('image')->nullable();
             $table->text('bio')->nullable();
+            $table->boolean('is_admin')->default(true);
             $table->timestamps();
 
             $table->index(['username']);
