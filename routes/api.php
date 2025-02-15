@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ArticleRevisionController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CommentController;
@@ -45,4 +46,10 @@ Route::middleware('auth')->group(function () {
         Route::post('{article}/comments', [CommentController::class, 'store']);
         Route::delete('{article}/comments/{comment}', [CommentController::class, 'destroy']);
     });
+});
+
+Route::middleware('jwt.auth')->group(function () {
+    Route::get('/articles/{id}/revisions', [ArticleRevisionController::class, 'listRevisions']);
+    Route::get('/articles/{id}/revisions/{revision_id}', [ArticleRevisionController::class, 'showRevision']);
+    Route::post('/articles/{id}/revisions/{revision_id}/revert', [ArticleRevisionController::class, 'revertRevision']);
 });
